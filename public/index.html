@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carousel MVP</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <div class="panel-head">
+          <p class="eyebrow">Instagram Carousel Builder</p>
+          <h1>Carousel MVP</h1>
+          <p class="sub">
+            Structured carousel copy with slide text, image prompts, caption, and
+            hashtags.
+          </p>
+        </div>
+
+        <form id="carousel-form" class="form-grid">
+          <label>
+            Business Type
+            <input name="business_type" required placeholder="photographer" />
+          </label>
+
+          <label>
+            City
+            <input name="city" placeholder="Little Rock" />
+          </label>
+
+          <label>
+            Service
+            <input name="service" required placeholder="real estate media" />
+          </label>
+
+          <label>
+            Tone
+            <input name="tone" placeholder="premium" />
+          </label>
+
+          <label>
+            Content Bucket
+            <input name="bucket" required placeholder="results_proof" />
+          </label>
+
+          <label>
+            Number of Slides (4-10)
+            <input
+              name="num_slides"
+              type="number"
+              required
+              min="4"
+              max="10"
+              value="6"
+            />
+          </label>
+
+          <div class="options">
+            <label class="checkbox">
+              <input name="use_mock" type="checkbox" checked />
+              Force mock mode
+            </label>
+            <label class="checkbox">
+              <input name="persist" type="checkbox" checked />
+              Save JSON to disk
+            </label>
+          </div>
+
+          <button id="submit-btn" type="submit">Generate Carousel</button>
+        </form>
+
+        <div class="skill-box">
+          <h2>Graphics Skill</h2>
+          <p id="skill-status" class="skill-status">Loading graphics rules...</p>
+          <div id="skill-content" class="skill-content"></div>
+        </div>
+      </section>
+
+      <section class="panel output">
+        <div class="output-head">
+          <h2>Output</h2>
+          <button id="copy-btn" type="button">Copy JSON</button>
+        </div>
+
+        <p id="status" class="status">Ready.</p>
+
+        <div id="summary" class="summary hidden"></div>
+        <div id="slides" class="slides"></div>
+        <pre id="json-output" class="json"></pre>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

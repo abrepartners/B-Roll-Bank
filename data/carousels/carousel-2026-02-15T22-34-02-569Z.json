@@ -1,0 +1,60 @@
+{
+  "created_at": "2026-02-15T22:34:02.570Z",
+  "mode": "mock",
+  "input": {
+    "business_type": "Photographer",
+    "city": "Little Rock",
+    "service": "Drone",
+    "tone": "High end",
+    "bucket": "results",
+    "num_slides": 6
+  },
+  "output": {
+    "slides": [
+      {
+        "position": 1,
+        "headline": "**HOOK: Drone for Photographer**",
+        "body": "Photographer brands in Little Rock lose momentum when Drone content lacks High end consistency.",
+        "image_prompt": "High end, clean, cinematic visual for Photographer Drone hook slide in Little Rock, editorial lighting, minimal layout, no text"
+      },
+      {
+        "position": 2,
+        "headline": "**PROBLEM: Drone for Photographer**",
+        "body": "Photographer brands in Little Rock lose momentum when Drone content lacks High end consistency.",
+        "image_prompt": "High end, clean, cinematic visual for Photographer Drone problem slide in Little Rock, editorial lighting, minimal layout, no text"
+      },
+      {
+        "position": 3,
+        "headline": "**PAIN: Drone for Photographer**",
+        "body": "Photographer brands in Little Rock lose momentum when Drone content lacks High end consistency.",
+        "image_prompt": "High end, clean, cinematic visual for Photographer Drone pain slide in Little Rock, editorial lighting, minimal layout, no text"
+      },
+      {
+        "position": 4,
+        "headline": "**INSIGHT: Drone for Photographer**",
+        "body": "Photographer brands in Little Rock lose momentum when Drone content lacks High end consistency.",
+        "image_prompt": "High end, clean, cinematic visual for Photographer Drone insight slide in Little Rock, editorial lighting, minimal layout, no text"
+      },
+      {
+        "position": 5,
+        "headline": "**SOLUTION: Drone for Photographer**",
+        "body": "Photographer brands in Little Rock lose momentum when Drone content lacks High end consistency.",
+        "image_prompt": "High end, clean, cinematic visual for Photographer Drone solution slide in Little Rock, editorial lighting, minimal layout, no text"
+      },
+      {
+        "position": 6,
+        "headline": "**CTA: Drone for Photographer**",
+        "body": "Photographer brands in Little Rock lose momentum when Drone content lacks High end consistency.",
+        "image_prompt": "High end, clean, cinematic visual for Photographer Drone cta slide in Little Rock, editorial lighting, minimal layout, no text"
+      }
+    ],
+    "caption": "Most Photographer brands undersell their Drone. A premium, clean, cinematic content system removes friction and drives better conversion. Build a repeatable visual strategy in Little Rock and keep every touchpoint on-brand. DM \"CAROUSEL\" to get a tailored plan.",
+    "hashtags": [
+      "#photographer",
+      "#drone",
+      "#results",
+      "#instagrammarketing",
+      "#smallbusiness"
+    ]
+  }
+}

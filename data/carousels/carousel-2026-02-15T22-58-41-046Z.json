@@ -1,0 +1,60 @@
+{
+  "created_at": "2026-02-15T22:58:41.046Z",
+  "mode": "mock",
+  "input": {
+    "business_type": "photographer",
+    "city": "little rock",
+    "service": "real estate media",
+    "tone": "premium",
+    "bucket": "results",
+    "num_slides": 6
+  },
+  "output": {
+    "slides": [
+      {
+        "position": 1,
+        "headline": "**HOOK: real estate media for photographer**",
+        "body": "photographer brands in little rock lose momentum when real estate media content lacks premium consistency.",
+        "image_prompt": "premium, clean, cinematic visual for photographer real estate media hook slide in little rock, editorial lighting, minimal layout, no text"
+      },
+      {
+        "position": 2,
+        "headline": "**PROBLEM: real estate media for photographer**",
+        "body": "photographer brands in little rock lose momentum when real estate media content lacks premium consistency.",
+        "image_prompt": "premium, clean, cinematic visual for photographer real estate media problem slide in little rock, editorial lighting, minimal layout, no text"
+      },
+      {
+        "position": 3,
+        "headline": "**PAIN: real estate media for photographer**",
+        "body": "photographer brands in little rock lose momentum when real estate media content lacks premium consistency.",
+        "image_prompt": "premium, clean, cinematic visual for photographer real estate media pain slide in little rock, editorial lighting, minimal layout, no text"
+      },
+      {
+        "position": 4,
+        "headline": "**INSIGHT: real estate media for photographer**",
+        "body": "photographer brands in little rock lose momentum when real estate media content lacks premium consistency.",
+        "image_prompt": "premium, clean, cinematic visual for photographer real estate media insight slide in little rock, editorial lighting, minimal layout, no text"
+      },
+      {
+        "position": 5,
+        "headline": "**SOLUTION: real estate media for photographer**",
+        "body": "photographer brands in little rock lose momentum when real estate media content lacks premium consistency.",
+        "image_prompt": "premium, clean, cinematic visual for photographer real estate media solution slide in little rock, editorial lighting, minimal layout, no text"
+      },
+      {
+        "position": 6,
+        "headline": "**CTA: real estate media for photographer**",
+        "body": "photographer brands in little rock lose momentum when real estate media content lacks premium consistency.",
+        "image_prompt": "premium, clean, cinematic visual for photographer real estate media cta slide in little rock, editorial lighting, minimal layout, no text"
+      }
+    ],
+    "caption": "Most photographer brands undersell their real estate media. A premium, clean, cinematic content system removes friction and drives better conversion. Build a repeatable visual strategy in little rock and keep every touchpoint on-brand. DM \"CAROUSEL\" to get a tailored plan.",
+    "hashtags": [
+      "#photographer",
+      "#realestatemedia",
+      "#results",
+      "#instagrammarketing",
+      "#smallbusiness"
+    ]
+  }
+}

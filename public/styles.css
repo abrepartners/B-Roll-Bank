@@ -1,0 +1,255 @@
+:root {
+  --bg: #ece9df;
+  --ink: #132325;
+  --ink-soft: #2c4548;
+  --card: rgba(250, 248, 243, 0.82);
+  --card-strong: #f9f5eb;
+  --line: rgba(20, 49, 53, 0.18);
+  --accent: #0f5f68;
+  --accent-2: #6d8a5f;
+  --danger: #b24848;
+  --radius: 18px;
+  --shadow: 0 20px 36px rgba(9, 35, 39, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 14% 14%, rgba(109, 138, 95, 0.3), transparent 48%),
+    radial-gradient(circle at 86% 18%, rgba(15, 95, 104, 0.26), transparent 44%),
+    linear-gradient(130deg, #f4f0e8 0%, #e8e4d8 48%, #f0ede4 100%);
+}
+
+.shell {
+  width: min(1160px, 94vw);
+  margin: 36px auto;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1fr 1.2fr;
+}
+
+.panel {
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.panel-head h1 {
+  margin: 6px 0 8px;
+  font-size: 1.9rem;
+  letter-spacing: 0.01em;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+}
+
+.sub {
+  margin: 0 0 16px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.form-grid {
+  display: grid;
+  gap: 12px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.95rem;
+}
+
+input,
+button {
+  font: inherit;
+}
+
+input {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--card-strong);
+  color: var(--ink);
+}
+
+input:focus {
+  outline: 2px solid rgba(15, 95, 104, 0.28);
+  border-color: var(--accent);
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.skill-box {
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.skill-box h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.skill-status {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.skill-content {
+  margin-top: 8px;
+  display: grid;
+  gap: 8px;
+  font-size: 0.86rem;
+}
+
+.skill-content a {
+  color: var(--accent);
+}
+
+.checkbox {
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  display: grid;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.checkbox input {
+  margin: 0;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: transform 0.16s ease, opacity 0.16s ease;
+}
+
+#submit-btn {
+  justify-self: start;
+  background: linear-gradient(120deg, var(--accent), #11434a);
+  color: #ecf8f8;
+  font-weight: 600;
+}
+
+#copy-btn {
+  background: #e6efe5;
+  color: #193333;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.output-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.output-head h2 {
+  margin: 0;
+}
+
+.status {
+  margin: 10px 0 14px;
+  color: var(--ink-soft);
+}
+
+.status.error {
+  color: var(--danger);
+}
+
+.summary {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(248, 245, 236, 0.8);
+  margin-bottom: 14px;
+}
+
+.hidden {
+  display: none;
+}
+
+.slides {
+  display: grid;
+  gap: 10px;
+}
+
+.slide {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.slide h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.slide p {
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+
+.slide code {
+  display: block;
+  white-space: pre-wrap;
+  font-size: 0.8rem;
+  color: #22484c;
+}
+
+.slide .design-notes {
+  margin: 0 0 8px;
+  font-size: 0.83rem;
+  color: #2b4d51;
+}
+
+.json {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  background: #f7f3e8;
+  max-height: 280px;
+  overflow: auto;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 960px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+}
