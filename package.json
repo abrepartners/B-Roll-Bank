@@ -1,0 +1,30 @@
+{
+  "name": "carousel-mvp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "B-Roll Bank MVP backend + app",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "generate": "node index.js",
+    "check": "node -c carouselGenerator.js && node -c server.js && node -c index.js && node -c public/app.js",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.53.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "node-cron": "^4.2.1",
+    "openai": "^4.0.0",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.1"
+  }
+}
