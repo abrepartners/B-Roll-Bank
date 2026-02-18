@@ -3,93 +3,445 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Carousel MVP</title>
+    <title>B-Roll Bank MVP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main class="shell">
-      <section class="panel">
-        <div class="panel-head">
-          <p class="eyebrow">Instagram Carousel Builder</p>
-          <h1>Carousel MVP</h1>
-          <p class="sub">
-            Structured carousel copy with slide text, image prompts, caption, and
-            hashtags.
+    <div class="bg-mesh"></div>
+
+    <section id="auth-overlay" class="auth-overlay hidden" aria-live="polite">
+      <div class="auth-card">
+        <div class="auth-head">
+          <p class="eyebrow">Supabase Auth</p>
+          <h2>Sign in to sync your B-Roll Bank</h2>
+          <p>Account sync is optional. You can continue in guest mode and use the app locally.</p>
+        </div>
+
+        <div class="auth-grid">
+          <form id="sign-in-form" class="form-grid compact">
+            <h3>Sign In</h3>
+            <label>
+              Email
+              <input id="sign-in-email" type="email" name="email" autocomplete="email" required />
+            </label>
+            <label>
+              Password
+              <input id="sign-in-password" type="password" name="password" autocomplete="current-password" required />
+            </label>
+            <button id="sign-in-submit" type="submit" class="btn-primary" data-testid="sign-in-submit">Sign In</button>
+          </form>
+
+          <form id="sign-up-form" class="form-grid compact">
+            <h3>Create Account</h3>
+            <label>
+              Email
+              <input id="sign-up-email" type="email" name="email" autocomplete="email" required />
+            </label>
+            <label>
+              Password
+              <input id="sign-up-password" type="password" name="password" autocomplete="new-password" minlength="8" required />
+            </label>
+            <button id="sign-up-submit" type="submit" class="btn-ghost">Create Account</button>
+          </form>
+        </div>
+
+        <p id="auth-status" class="hint">Use your account to load and save app data.</p>
+        <div class="row-actions">
+          <button id="auth-resend-btn" type="button" class="btn-action">Resend Confirmation Email</button>
+          <button id="auth-guest-btn" type="button" class="btn-ghost">Continue as Guest</button>
+        </div>
+      </div>
+    </section>
+
+    <main class="app-shell" id="appRoot">
+      <header class="topbar panel">
+        <div class="brand-wrap">
+          <p class="eyebrow">Film Once, Post All Month</p>
+          <h1>B-Roll Bank</h1>
+          <p class="subhead">
+            Mobile-first creator workflow for real estate agents: Batch Day, Clip Library, and 2-minute post
+            packages.
           </p>
         </div>
 
-        <form id="carousel-form" class="form-grid">
-          <label>
-            Business Type
-            <input name="business_type" required placeholder="photographer" />
-          </label>
-
-          <label>
-            City
-            <input name="city" placeholder="Little Rock" />
-          </label>
-
-          <label>
-            Service
-            <input name="service" required placeholder="real estate media" />
-          </label>
-
-          <label>
-            Tone
-            <input name="tone" placeholder="premium" />
-          </label>
-
-          <label>
-            Content Bucket
-            <input name="bucket" required placeholder="results_proof" />
-          </label>
-
-          <label>
-            Number of Slides (4-10)
-            <input
-              name="num_slides"
-              type="number"
-              required
-              min="4"
-              max="10"
-              value="6"
-            />
-          </label>
-
-          <div class="options">
-            <label class="checkbox">
-              <input name="use_mock" type="checkbox" checked />
-              Force mock mode
-            </label>
-            <label class="checkbox">
-              <input name="persist" type="checkbox" checked />
-              Save JSON to disk
-            </label>
+        <div class="topbar-side">
+          <div class="topbar-stats">
+            <article>
+              <span>Clips</span>
+              <strong id="stat-clips">0</strong>
+            </article>
+            <article>
+              <span>Drafts</span>
+              <strong id="stat-drafts">0</strong>
+            </article>
+            <article>
+              <span>Streak</span>
+              <strong id="stat-streak">0d</strong>
+            </article>
           </div>
 
-          <button id="submit-btn" type="submit">Generate Carousel</button>
-        </form>
+          <div class="account-bar">
+            <p id="auth-user-email" class="hint">Guest mode (local only)</p>
+            <div class="row-actions">
+              <button id="auth-open-btn" type="button" class="btn-ghost">Sign In</button>
+              <button id="auth-logout-btn" type="button" class="btn-action">Log Out</button>
+            </div>
+          </div>
+        </div>
+      </header>
 
-        <div class="skill-box">
-          <h2>Graphics Skill</h2>
-          <p id="skill-status" class="skill-status">Loading graphics rules...</p>
-          <div id="skill-content" class="skill-content"></div>
+      <section id="onboarding-overlay" class="onboarding-overlay hidden" aria-live="polite">
+        <div class="onboarding-card">
+          <p class="eyebrow">First-time setup</p>
+          <h2>Build your monthly content rhythm</h2>
+          <p>
+            Set your posting goal, session length, and channels. You can update everything later in Settings.
+          </p>
+          <form id="onboarding-form" class="form-grid">
+            <label>
+              Market (City, State)
+              <input required name="market" placeholder="Little Rock, AR" />
+            </label>
+            <label>
+              Posting Goal
+              <select name="postingGoal" required>
+                <option value="3_per_week">3 per week</option>
+                <option value="5_per_week">5 per week</option>
+                <option value="daily">Daily</option>
+              </select>
+            </label>
+            <label>
+              Batch Session Length
+              <select name="batchSessionLength" required>
+                <option value="60">60 minutes</option>
+                <option value="90" selected>90 minutes</option>
+                <option value="120">120 minutes</option>
+              </select>
+            </label>
+            <fieldset>
+              <legend>Platforms</legend>
+              <label class="checkbox-inline"><input type="checkbox" name="platforms" value="Instagram" checked />Instagram</label>
+              <label class="checkbox-inline"><input type="checkbox" name="platforms" value="TikTok" checked />TikTok</label>
+              <label class="checkbox-inline"><input type="checkbox" name="platforms" value="Facebook" />Facebook</label>
+              <label class="checkbox-inline"><input type="checkbox" name="platforms" value="YouTube Shorts" />YouTube Shorts</label>
+            </fieldset>
+            <button type="submit" class="btn-primary">Save Plan</button>
+          </form>
         </div>
       </section>
 
-      <section class="panel output">
-        <div class="output-head">
-          <h2>Output</h2>
-          <button id="copy-btn" type="button">Copy JSON</button>
+      <section class="tab-panel panel active" data-tab="today" id="tab-today">
+        <div class="panel-head">
+          <h2>Today</h2>
+          <p>Next best action, weekly momentum, and quick start shortcuts.</p>
         </div>
 
-        <p id="status" class="status">Ready.</p>
+        <div class="today-grid">
+          <article class="card emphasis" id="next-action-card">
+            <h3>Next Best Action</h3>
+            <p id="next-action-text">Start your first batch session.</p>
+            <button class="btn-primary" id="next-action-btn">Start Batch Session</button>
+          </article>
 
-        <div id="summary" class="summary hidden"></div>
-        <div id="slides" class="slides"></div>
-        <pre id="json-output" class="json"></pre>
+          <article class="card">
+            <h3>Weekly Clip Target</h3>
+            <p id="clip-progress-label">0 / 10 clips this week</p>
+            <div class="progress-track" aria-hidden="true">
+              <span id="clip-progress-bar"></span>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Posting Streak</h3>
+            <p class="streak-value" id="streak-value">0 days</p>
+            <p class="hint">A draft counts as posted momentum for MVP tracking.</p>
+          </article>
+        </div>
+
+        <div class="quick-actions">
+          <button class="btn-ghost" data-jump-tab="film" data-focus="#batch-form">Start Batch Session</button>
+          <button class="btn-ghost" data-jump-tab="post" data-focus="#caption-first-form">Build Caption First Post</button>
+          <button class="btn-ghost" data-jump-tab="post" data-focus="#daily-filler-form">Create Daily Filler Post</button>
+        </div>
+      </section>
+
+      <section class="tab-panel panel" data-tab="film" id="tab-film">
+        <div class="panel-head">
+          <h2>Film</h2>
+          <p>Run Monthly Batch Day or Quick Add 10 with clear shot-by-shot prompts.</p>
+        </div>
+
+        <div class="stack">
+          <article class="card">
+            <h3>Monthly Batch Day</h3>
+            <form id="batch-form" class="form-grid compact">
+              <label>
+                Time Available (minutes)
+                <input type="number" min="30" max="180" step="10" name="timeAvailable" value="90" required />
+              </label>
+              <label>
+                Locations (comma-separated)
+                <input name="locations" placeholder="Kitchen, Office, Front Door" required />
+              </label>
+              <label>
+                Wardrobe Count
+                <input type="number" min="1" max="8" name="wardrobeCount" value="2" required />
+              </label>
+              <fieldset>
+                <legend>Gear</legend>
+                <label class="checkbox-inline"><input type="checkbox" name="gear" value="Tripod" checked />Tripod</label>
+                <label class="checkbox-inline"><input type="checkbox" name="gear" value="Light" checked />Light</label>
+                <label class="checkbox-inline"><input type="checkbox" name="gear" value="Mic" />Mic</label>
+              </fieldset>
+              <button type="submit" class="btn-primary">Generate Shot Queue</button>
+            </form>
+            <div id="batch-session-output" class="session-output"></div>
+          </article>
+
+          <article class="card">
+            <h3>Quick Add 10</h3>
+            <form id="quick10-form" class="form-grid compact">
+              <label>
+                Focus Category
+                <select name="category" id="quick10-category"></select>
+              </label>
+              <label>
+                Location Tag
+                <input name="location" placeholder="Downtown listing" required />
+              </label>
+              <button type="submit" class="btn-primary">Generate 10 Shot Prompts</button>
+            </form>
+            <div id="quick10-output" class="session-output"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="tab-panel panel" data-tab="library" id="tab-library">
+        <div class="panel-head">
+          <h2>Library</h2>
+          <p>Tag and find clips in seconds with filters, favorites, and overused flags.</p>
+        </div>
+
+        <article class="card">
+          <h3>Add Clip Metadata</h3>
+          <form id="clip-form" class="form-grid compact">
+            <label>
+              Category
+              <select name="category" id="clip-category"></select>
+            </label>
+            <label>
+              Shot Type
+              <select name="shotType">
+                <option value="wide">Wide</option>
+                <option value="medium">Medium</option>
+                <option value="tight">Tight</option>
+              </select>
+            </label>
+            <label>
+              Location Tag
+              <input name="locationTag" placeholder="Front porch" required />
+            </label>
+            <label>
+              Outfit Label
+              <input name="outfitTag" placeholder="Navy blazer" />
+            </label>
+            <label>
+              Mood
+              <select name="moodTag">
+                <option value="neutral">Neutral</option>
+                <option value="smile">Smile</option>
+                <option value="serious">Serious</option>
+              </select>
+            </label>
+            <label>
+              Tags (comma-separated)
+              <input name="tags" placeholder="closing table, laptop" />
+            </label>
+            <label>
+              Notes
+              <input name="notes" placeholder="Good natural light" />
+            </label>
+            <button type="submit" class="btn-primary" data-testid="save-clip-btn">Save Clip</button>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Browse Clips</h3>
+          <div class="filters">
+            <label>
+              Search
+              <input id="library-search" placeholder="Search tags, location, notes" />
+            </label>
+            <label>
+              Category
+              <select id="library-category-filter"></select>
+            </label>
+            <label class="checkbox-inline"><input id="library-favorites-filter" type="checkbox" />Favorites only</label>
+            <label class="checkbox-inline"><input id="library-overused-filter" type="checkbox" />Overused only</label>
+          </div>
+          <p id="library-count" class="hint"></p>
+          <div id="library-list" class="clip-list"></div>
+        </article>
+      </section>
+
+      <section class="tab-panel panel" data-tab="post" id="tab-post">
+        <div class="panel-head">
+          <h2>Post Builder</h2>
+          <p>Generate post packages fast with Caption First or Daily Filler mode.</p>
+        </div>
+
+        <div class="mode-toggle" role="tablist" aria-label="Post mode">
+          <button class="mode-btn active" data-mode="caption">Caption First</button>
+          <button class="mode-btn" data-mode="filler">Daily Filler</button>
+        </div>
+
+        <article class="card mode-panel active" data-mode-panel="caption">
+          <form id="caption-first-form" class="form-grid compact">
+            <label>
+              Post Type
+              <select name="postType">
+                <option value="Tip">Tip</option>
+                <option value="Lesson learned">Lesson learned</option>
+                <option value="Myth vs truth">Myth vs truth</option>
+                <option value="3 mistakes">3 mistakes</option>
+                <option value="Checklist">Checklist</option>
+              </select>
+            </label>
+            <label>
+              Topic
+              <input name="topic" placeholder="How to prep a listing for showings" required />
+            </label>
+            <label>
+              Tone
+              <select name="tone">
+                <option value="confident">Confident</option>
+                <option value="friendly">Friendly</option>
+                <option value="bold">Bold</option>
+              </select>
+            </label>
+            <button type="submit" class="btn-primary" data-testid="generate-caption-btn">Generate Caption Package</button>
+          </form>
+          <div id="caption-output" class="post-output"></div>
+        </article>
+
+        <article class="card mode-panel" data-mode-panel="filler">
+          <form id="daily-filler-form" class="form-grid compact">
+            <label>
+              Choose Clip
+              <select name="clipId" id="daily-clip-id"></select>
+            </label>
+            <label>
+              Value Line Type
+              <select name="valueType">
+                <option value="reminder">Reminder</option>
+                <option value="truth">Truth</option>
+                <option value="quick_tip">Quick tip</option>
+              </select>
+            </label>
+            <label>
+              Optional Topic
+              <input name="topic" placeholder="Open house prep" />
+            </label>
+            <label>
+              CTA Type
+              <select name="ctaType">
+                <option value="comment_keyword">Comment keyword</option>
+                <option value="dm_keyword">DM keyword</option>
+                <option value="book_link">Book link</option>
+              </select>
+            </label>
+            <button type="submit" class="btn-primary">Generate Daily Filler</button>
+          </form>
+          <div id="filler-output" class="post-output"></div>
+        </article>
+
+        <article class="card">
+          <h3>Saved Drafts</h3>
+          <div id="draft-list" class="draft-list"></div>
+        </article>
+      </section>
+
+      <section class="tab-panel panel" data-tab="settings" id="tab-settings">
+        <div class="panel-head">
+          <h2>Settings</h2>
+          <p>Reminders, templates, and export tools.</p>
+        </div>
+
+        <article class="card">
+          <h3>Reminder Schedule</h3>
+          <form id="reminder-form" class="form-grid compact">
+            <label class="checkbox-inline"><input type="checkbox" name="monthlyBatchEnabled" checked />Monthly Batch Day reminder</label>
+            <label>
+              Monthly Batch Day
+              <input type="date" name="monthlyBatchDate" />
+            </label>
+            <label class="checkbox-inline"><input type="checkbox" name="weeklyAddEnabled" checked />Weekly Add 10 reminder</label>
+            <label>
+              Weekly Add 10 Day
+              <select name="weeklyAddDay">
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+                <option>Saturday</option>
+                <option>Sunday</option>
+              </select>
+            </label>
+            <label class="checkbox-inline"><input type="checkbox" name="monthlyRefreshEnabled" checked />Monthly Refresh reminder</label>
+            <label>
+              Monthly Refresh Date
+              <input type="date" name="monthlyRefreshDate" />
+            </label>
+            <button type="submit" class="btn-primary">Save Reminder Settings</button>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Notification Delivery</h3>
+          <p class="hint">Web push sends scheduled reminders even when the app is closed (if server worker is running).</p>
+          <div class="row-actions">
+            <button id="push-enable-btn" type="button" class="btn-primary">Enable Web Push</button>
+            <button id="push-test-btn" type="button" class="btn-ghost">Send Test Push</button>
+            <button id="native-sync-btn" type="button" class="btn-action">Sync Native Reminders</button>
+          </div>
+          <p id="push-status" class="hint">Push not enabled.</p>
+        </article>
+
+        <article class="card settings-actions">
+          <h3>Backup and Utility</h3>
+          <button id="export-backup" class="btn-ghost">Export App Backup (.json)</button>
+          <label class="file-input">
+            Import Backup
+            <input id="import-backup" type="file" accept="application/json" />
+          </label>
+          <button id="reset-demo" class="btn-danger">Reset Demo Data</button>
+          <h4>Filming Guide</h4>
+          <ul>
+            <li>Capture every action as wide + medium + tight.</li>
+            <li>Record 5 to 8 seconds, two takes: neutral then smile.</li>
+            <li>Swap wardrobe and repeat queue for fresh variation.</li>
+            <li>Mark overused clips and rotate in alternatives weekly.</li>
+          </ul>
+        </article>
       </section>
     </main>
+
+    <nav class="tabbar" aria-label="Main tabs">
+      <button class="tab-btn active" data-tab="today">Today</button>
+      <button class="tab-btn" data-tab="film">Film</button>
+      <button class="tab-btn" data-tab="library">Library</button>
+      <button class="tab-btn" data-tab="post">Post</button>
+      <button class="tab-btn" data-tab="settings">Settings</button>
+    </nav>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
 
     <script src="/app.js"></script>
   </body>

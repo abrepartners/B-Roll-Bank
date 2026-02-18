@@ -1,131 +1,141 @@
-# Carousel MVP Backend
+# B-Roll Bank MVP (Supabase + Web Push)
 
-Minimal Node.js backend that generates Instagram carousel JSON from structured input.
+Mobile-first B-Roll workflow app for real estate agents.
 
-## Included
+This repo now includes:
+- Optional Supabase auth (`email/password`) with guest mode fallback
+- Account-scoped cloud persistence when signed in, local persistence in guest mode
+- Web push reminder delivery (`service worker` + `web-push` + scheduled reminder sweep)
+- Native-wrapper reminder sync path (Capacitor `LocalNotifications` hook)
+- Playwright E2E suite scaffold (auth-gated workflow coverage)
+- Existing carousel generation endpoints remain available
 
-- Input schema constant (`CAROUSEL_INPUT_SCHEMA`)
-- Prompt template constant (`CAROUSEL_PROMPT_TEMPLATE`)
-- Graphics skill constant with research-backed design rules (`GRAPHICS_CREATION_SKILL`)
-- `generateCarousel(input)` function (live OpenAI call)
-- Mock mode output for development without API key
-- REST API endpoints for schema, sample input, and generation
+## Tech Overview
 
-## Files
+- Frontend: static HTML/CSS/JS at `/public`
+- Backend: Express API at `/server.js`
+- Persistence: Supabase (`app_user_state`, `push_subscriptions`, `reminder_events`)
+- Notifications: Web Push (`VAPID`) + hourly reminder sweep (local `node-cron` or Vercel Cron)
 
-- `carouselGenerator.js`: schema, prompt template, generator function
-- `graphicsSkill.js`: design skill profile + research sources + prompt block
-- `server.js`: Express API
-- `index.js`: local CLI runner
-- `public/`: local browser UI
-- `sample-input.json`: test payload
+## 1) Supabase Setup
 
-## Setup
+Run `/Users/camillebrown/.codex/workspaces/default/supabase/schema.sql` in your Supabase SQL editor.
 
-1. Install dependencies:
+Tables created:
+- `app_user_state`
+- `push_subscriptions`
+- `reminder_events`
 
-```bash
-npm install
-```
+## 2) Environment Setup
 
-2. Optional environment setup:
+Copy env template and fill values:
 
 ```bash
 cp .env.example .env
 ```
 
-3. Run the API:
+Required for full app behavior:
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `VAPID_PUBLIC_KEY`
+- `VAPID_PRIVATE_KEY`
+- `VAPID_SUBJECT`
+
+Optional:
+- `REMINDER_TIMEZONE` (default: `America/Chicago`)
+- `AUTH_EMAIL_REDIRECT_TO` (default: `http://localhost:3000/app`)
+- `CRON_SECRET` (recommended; protects `/api/cron/reminders`)
+- `DISABLE_IN_PROCESS_CRON` (set `true` to force cron via external scheduler only)
+- `OPENAI_API_KEY` for existing carousel generation routes
+
+## 3) Generate VAPID Keys
 
 ```bash
+npx web-push generate-vapid-keys
+```
+
+Copy output into `.env`.
+
+## 4) Install + Run
+
+```bash
+npm install
 npm start
 ```
 
-4. Open the local UI:
+Open:
+
+- App: [http://localhost:3000/app](http://localhost:3000/app)
+- API root: [http://localhost:3000/](http://localhost:3000/)
+
+## Auth + Persistence Flow
+
+- Guest users can use the full app with local persistence only.
+- Signed-in users get cloud sync through Supabase.
+- Frontend stores Supabase access/refresh tokens in `sessionStorage` when signed in.
+- Sync endpoints:
+  - `GET /api/app-state`
+  - `PUT /api/app-state`
+
+## Reminder Delivery Flow
+
+### Web push path
+- User enables push in Settings.
+- Browser registers `/sw.js` and subscribes with VAPID key.
+- Subscription is saved via `POST /api/push/subscribe`.
+- Reminder sweep sends push payloads via `runReminderSweep`.
+
+### Scheduling the sweep
+- Local/self-hosted Node server: in-process hourly cron (`node-cron`) runs automatically.
+- Vercel Hobby: `vercel.json` must schedule `GET /api/cron/reminders` once daily.
+- Vercel Pro: you can switch cron to hourly (`0 * * * *`) if you want higher cadence.
+- Protect cron by setting `CRON_SECRET` in environment; Vercel sends it as `Authorization: Bearer <CRON_SECRET>`.
+
+### Native wrapper path
+- `Sync Native Reminders` button calls Capacitor LocalNotifications plugin when present.
+- In plain web, this path is inert and displays status.
+
+## API Additions
+
+Auth:
+- `POST /api/auth/signup`
+- `POST /api/auth/resend-confirmation`
+- `POST /api/auth/login`
+- `POST /api/auth/refresh`
+- `GET /api/auth/session`
+
+State:
+- `GET /api/app-state`
+- `PUT /api/app-state`
+
+Push:
+- `GET /api/push/vapid-public-key`
+- `POST /api/push/subscribe`
+- `DELETE /api/push/subscribe`
+- `POST /api/push/test`
+- `GET /api/cron/reminders` (cron trigger endpoint)
+
+## E2E Tests (Playwright)
+
+List tests:
 
 ```bash
-open http://localhost:3000/app
+npm run test:e2e -- --list
 ```
 
-5. Run the CLI generator once:
+Run suite:
 
 ```bash
-npm run generate
+npm run test:e2e
 ```
 
-## API
+Authenticated scenario uses env vars and is skipped when unset:
+- `E2E_EMAIL`
+- `E2E_PASSWORD`
 
-### `GET /api/schema`
-Returns the JSON input schema for your UI form.
+## Notes
 
-### `GET /api/sample-input`
-Returns an MVP test payload.
-
-### `GET /api/graphics-skill`
-Returns the graphics skill object the page uses to guide visual creation rules.
-
-### `POST /api/carousel`
-Generates carousel JSON.
-
-Request body:
-
-```json
-{
-  "business_type": "photographer",
-  "city": "Little Rock",
-  "service": "real estate media",
-  "tone": "premium",
-  "bucket": "results_proof",
-  "num_slides": 6
-}
-```
-
-Example request:
-
-```bash
-curl -X POST http://localhost:3000/api/carousel \
-  -H "Content-Type: application/json" \
-  -d @sample-input.json
-```
-
-Force mock mode:
-
-```bash
-curl -X POST "http://localhost:3000/api/carousel?mock=1" \
-  -H "Content-Type: application/json" \
-  -d @sample-input.json
-```
-
-Persist output JSON to disk:
-
-```bash
-curl -X POST "http://localhost:3000/api/carousel?mock=1&persist=1" \
-  -H "Content-Type: application/json" \
-  -d @sample-input.json
-```
-
-### `GET /api/carousels`
-Lists saved JSON files in `data/carousels`.
-
-## App Flow Mapping
-
-1. UI collects `business_type`, `city`, `service`, `tone`, `bucket`, `num_slides`.
-2. UI posts input JSON to `POST /api/carousel`.
-3. API returns:
-   - `output.graphic_system`
-   - `output.slides[*].headline`
-   - `output.slides[*].body`
-   - `output.slides[*].image_prompt`
-   - `output.slides[*].design_notes`
-   - `output.caption`
-   - `output.hashtags`
-   - `mode` and `mode_detail` (`live`, `mock_forced`, `mock_fallback`, etc.)
-4. API can persist output as JSON (`data/carousels/*.json`) and UI renders preview.
-5. Optional: pass each `image_prompt` to an image generation API.
-
-## Research Sources Used In Graphics Skill
-
-- [W3C WCAG contrast minimum](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)
-- [Nielsen Norman Group: Visual Design Principles](https://www.nngroup.com/reports/visual-design/)
-- [Baymard: Line Length Readability](https://baymard.com/blog/line-length-readability)
-- [OpenAI Cookbook: Generate Images With GPT Image](https://cookbook.openai.com/examples/generate_images_with_gpt_image)
-- [Meta IG media spec summary with references](https://ppc.land/meta-updates-instagram-marketing-api-with-new-carousel-video-and-instagram-user-data-fields/)
+- If Supabase env vars are missing, auth/state routes return `503` with setup guidance.
+- Reminder sending requires both Supabase config and VAPID config.
+- Existing carousel endpoints are still active.
