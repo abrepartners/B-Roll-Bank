@@ -10,6 +10,8 @@
     "dev": "node server.js",
     "generate": "node index.js",
     "check": "node -c carouselGenerator.js && node -c server.js && node -c index.js && node -c public/app.js",
+    "audit:openclaw": "node scripts/openclaw_audit.js",
+    "audit:ghl": "node scripts/log_openclaw_audit_to_ghl.js",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed"
   },

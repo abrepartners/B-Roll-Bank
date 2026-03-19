@@ -1,0 +1,107 @@
+{
+  "agents": {
+    "defaults": {
+      "subagents": {
+        "maxSpawnDepth": 2,
+        "maxChildrenPerAgent": 5,
+        "maxConcurrent": 8,
+        "runTimeoutSeconds": 900,
+        "archiveAfterMinutes": 60
+      },
+      "heartbeat": {
+        "every": "0m",
+        "model": "openai/gpt-4o-mini",
+        "includeReasoning": false,
+        "target": "last",
+        "ackMaxChars": 300
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "name": "main",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "heartbeat": {
+          "every": "30m",
+          "model": "openai/gpt-4o-mini",
+          "target": "last",
+          "ackMaxChars": 300,
+          "activeHours": {
+            "start": "07:30",
+            "end": "18:30",
+            "timezone": "America/Chicago"
+          }
+        },
+        "subagents": {
+          "allowAgents": ["*"]
+        }
+      },
+      {
+        "id": "the-analyst",
+        "name": "the-analyst",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-analyst/agent"
+      },
+      {
+        "id": "the-coordinator",
+        "name": "the-coordinator",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-coordinator/agent"
+      },
+      {
+        "id": "the-ghl-expert",
+        "name": "the-ghl-expert",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-ghl-expert/agent"
+      },
+      {
+        "id": "the-social-media-manager",
+        "name": "the-social-media-manager",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-social-media-manager/agent"
+      },
+      {
+        "id": "the-scout",
+        "name": "the-scout",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-scout/agent"
+      },
+      {
+        "id": "the-copywriter",
+        "name": "the-copywriter",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-copywriter/agent"
+      },
+      {
+        "id": "the-strategist",
+        "name": "the-strategist",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-strategist/agent"
+      },
+      {
+        "id": "the-marketer",
+        "name": "the-marketer",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-marketer/agent"
+      },
+      {
+        "id": "the-designer",
+        "name": "the-designer",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-designer/agent"
+      },
+      {
+        "id": "the-bookkeeper",
+        "name": "the-bookkeeper",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-bookkeeper/agent"
+      },
+      {
+        "id": "the-comms-manager",
+        "name": "the-comms-manager",
+        "workspace": "/Users/camillebrown/.openclaw/workspace",
+        "agentDir": "/Users/camillebrown/.openclaw/agents/the-comms-manager/agent"
+      }
+    ]
+  }
+}
